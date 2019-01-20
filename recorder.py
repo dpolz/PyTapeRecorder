@@ -73,6 +73,7 @@ try:
 			# Record sound
 			GPIO.output(15, GPIO.HIGH)
 			command_arecord = "sudo arecord -D sysdefault:CARD=Device -f S16_LE --rate=44100 --channels=1 --buffer-size=88200"
+			command_arecord_stop = "sudo pkill arecord"
 			command_lame = "sudo lame -b 320 - " + filename_tmp
 			process_arecord = subprocess.Popen(command_arecord.split(), stdout=subprocess.PIPE)
 			process_lame = subprocess.Popen(command_lame.split(), stdin=process_arecord.stdout, stdout=subprocess.PIPE)
@@ -80,7 +81,7 @@ try:
 				pass
 			
 			# Stop record and save
-			process_arecord.terminate()
+			process_arecord = subprocess.Popen(command_arecord_stop.split(), stdout=subprocess.PIPE)
 			process_lame.wait()
 			GPIO.output(15, GPIO.LOW)
 			GPIO.output(12, GPIO.LOW)
